@@ -1,0 +1,30 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        x:Class="Desktop.LoginWindow"
+        Title="LoginWindow">
+  <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="20">
+    <StackPanel Orientation="Horizontal" Spacing="20">
+      <TextBlock>Email:</TextBlock>
+      <TextBox Name="EmailTextBox" />
+     
+    </StackPanel>
+
+    <StackPanel Orientation="Horizontal" Spacing="20">
+      <TextBlock>Пароль:</TextBlock>
+      <TextBox Name="PasswordTextBox" PasswordChar="*" />
+    </StackPanel>
+
+    <StackPanel Orientation="Horizontal" Spacing="10">
+      <Button Name="LoginButton" Click="LoginClick">ВОЙТИ</Button>  
+      <Button>ОТМЕНА</Button>  
+    </StackPanel>
+
+    <StackPanel Orientation="Horizontal" Spacing="10">
+      <CheckBox>Запомнить меня</CheckBox>
+      <Button Click="ForgotPassword">Забыли пароль?</Button>
+    </StackPanel>
+  </StackPanel>
+</Window>

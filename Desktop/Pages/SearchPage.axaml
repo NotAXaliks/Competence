@@ -1,0 +1,76 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="Desktop.SearchPage">
+  <StackPanel Spacing="15">
+    <TextBlock Text="Поиск профилей" FontSize="20" FontWeight="Bold"/>
+
+    <Border Background="#F5F5F5" Padding="15">
+      <StackPanel Spacing="10">
+        <StackPanel Spacing="5">
+          <TextBlock Text="Технологии:"/>
+
+          <StackPanel Orientation="Horizontal" Spacing="5">
+            <AutoCompleteBox Name="SkillSearchBox" Width="250" FilterMode="None" />
+            <Button Content="+" Name="AddSkillBtn" Click="AddSkill_Click"/>
+          </StackPanel>
+
+          <ItemsControl Name="SkillsItemsControl">
+            <ItemsControl.ItemsPanel>
+              <ItemsPanelTemplate><WrapPanel/></ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.ItemTemplate>
+              <DataTemplate>
+                <Button Content="{Binding Name, StringFormat='x {0}'}"
+                        Click="RemoveSkill_Click" Margin="2"/>
+              </DataTemplate>
+            </ItemsControl.ItemTemplate>
+          </ItemsControl>
+        </StackPanel>
+
+        <Grid ColumnDefinitions="*, *, *" ColumnSpacing="10">
+          <StackPanel Grid.Column="0">
+            <TextBlock Text="Уровень:"/>
+            <NumericUpDown Name="LevelNum" Minimum="0" Maximum="10" Value="0"/>
+          </StackPanel>
+          <StackPanel Grid.Column="1">
+            <TextBlock Text="Опыт:"/>
+            <NumericUpDown Name="ExpNum" Minimum="0" Value="0"/>
+          </StackPanel>
+          <StackPanel Grid.Column="2">
+            <TextBlock Text="Рейтинг:"/>
+            <NumericUpDown Name="RatingNum" Minimum="0" Maximum="100" Value="0"/>
+          </StackPanel>
+        </Grid>
+
+        <StackPanel Orientation="Horizontal" Spacing="10">
+          <Button Content="Найти" Click="Search_Click" />
+          <Button Content="Очистить" Click="Clear_Click"/>
+          <Button Content="CSV" Click="ExportCsv_Click"/>
+        </StackPanel>
+      </StackPanel>
+    </Border>
+
+    <StackPanel Orientation="Horizontal" Spacing="10">
+      <TextBlock Text="Пагинация:" VerticalAlignment="Center"/>
+      <Button Content="25" Click="SetPageSize_Click" Tag="25"/>
+      <Button Content="50" Click="SetPageSize_Click" Tag="50"/>
+      <Button Content="100" Click="SetPageSize_Click" Tag="100"/>
+    </StackPanel>
+
+    <DataGrid Name="UsersGrid" IsReadOnly="True" Height="350" GridLinesVisibility="All">
+      <DataGrid.Columns>
+        <DataGridTextColumn Header="№" Binding="{Binding Index}" />
+        <DataGridTextColumn Header="Кандидат (ID)" Binding="{Binding PublicId}" />
+        <DataGridTextColumn Header="Навыки" Binding="{Binding SkillsDisplay}" Width="*" />
+        <DataGridTextColumn Header="Рейтинг" Binding="{Binding RatingWithTrend}" />
+        <DataGridTemplateColumn Header="Действия">
+          <DataGridTemplateColumn.CellTemplate>
+            <DataTemplate>
+              <Button Content="Подробно" Click="Detail_Click" Tag="{Binding}"/>
+            </DataTemplate>
+          </DataGridTemplateColumn.CellTemplate>
+        </DataGridTemplateColumn>
+      </DataGrid.Columns>
+    </DataGrid>
+  </StackPanel>
+</UserControl>

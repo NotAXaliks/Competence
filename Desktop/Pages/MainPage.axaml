@@ -1,0 +1,54 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="Desktop.MainPage">
+  <StackPanel Spacing="20">
+    <StackPanel Orientation="Horizontal">
+      <TextBlock FontSize="20">Сводка по активности</TextBlock>
+
+      <Button>Обновить</Button>
+    </StackPanel>
+
+    <StackPanel Orientation="Horizontal" Spacing="10">
+      <Border Width="200" Height="120" Grid.Column="0" Background="LightGray">
+        <StackPanel>
+          <TextBlock FontWeight="Bold">Активных профилей</TextBlock>
+          <TextBlock Name="ActiveProfilesTextBlock" />
+        </StackPanel>
+      </Border>
+      
+      <Border Width="200" Height="120" Grid.Column="1"  Background="LightGray">
+        <StackPanel>
+          <TextBlock FontWeight="Bold">Соответствие вакансиям</TextBlock>
+          <TextBlock Name="JobMatchTextBlock" />
+        </StackPanel>
+      </Border>
+
+      <Border Width="200" Height="120" Grid.Column="1"  Background="LightGray">
+        <StackPanel>
+          <TextBlock FontWeight="Bold">Средний рейтинг</TextBlock>
+          <TextBlock Name="AvgRatingTextBlock" />
+        </StackPanel>
+      </Border>
+    </StackPanel>
+
+   <Border Background="LightGray" CornerRadius="8" Padding="20">
+      <StackPanel Spacing="15">
+        <TextBlock Text="Топ-5 технологий" FontSize="16" FontWeight="Bold" />
+        <ItemsControl Name="TopSkillsControl">
+          <ItemsControl.ItemTemplate>
+            <DataTemplate>
+              <Grid ColumnDefinitions="120, *, 50" Margin="0,5">
+                <TextBlock Text="{Binding Name}" VerticalAlignment="Center" />
+                <ProgressBar Grid.Column="1" Value="{Binding Percent}" Height="15" Foreground="#2196F3" />
+                <TextBlock Grid.Column="2" Text="{Binding Percent, StringFormat={}{0}%}" Margin="10,0,0,0" VerticalAlignment="Center" />
+              </Grid>
+            </DataTemplate>
+          </ItemsControl.ItemTemplate>
+        </ItemsControl>
+      </StackPanel>
+    </Border>
+  </StackPanel>
+</UserControl>
