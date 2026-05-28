@@ -9,21 +9,9 @@ public class TokenService
 {
     public static string Path = "token";
 
-    public static string GetToken()
-    {
-        if (!File.Exists(Path)) return string.Empty;
+    public static bool Has() => File.Exists(Path);
 
-        var encrypted = File.ReadAllText(Path);
-
-        return Encoding.UTF8.GetString(Convert.FromBase64String(encrypted));
-    }
-
-    public static void SetToken(string token)
-    {
-        var encrypted = Convert.ToBase64String(Encoding.UTF8.GetBytes(token));
-
-        File.WriteAllText(Path, encrypted);
-    }
+    public static void Save() => File.WriteAllText(Path, "123");
 
     public static void Clear() => File.Delete(Path);
 }

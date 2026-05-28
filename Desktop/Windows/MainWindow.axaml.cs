@@ -13,7 +13,9 @@ public partial class MainWindow : Window
     public MainWindow()
     {
         InitializeComponent();
-App.MainWindow = this;
+
+        App.MainWindow = this;
+        
         UpdateUser();
         SelectMainPage();
     }

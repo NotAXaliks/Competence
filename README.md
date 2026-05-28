@@ -1,8 +1,52 @@
-## Установка Mobile:
+var pixelSize = new PixelSize((int)control.Bounds.Width, (int)control.Bounds.Height);
+using var bitmap = new RenderTargetBitmap(pixelSize);
+bitmap.Render(control);
 
-1. `npx @react-native-community/cli init Mobile --version 0.82.0`. Обязательно 0.82.0!
-2. создать файл в android/local.properties с путем до Android SDK
-```
-sdk.dir=C:\\Users\\Xaliks\\AppData\\Local\\Android\\Sdk
-```
-3. `adb reverse tcp:API_PORT tcp:API_PORT`
+using var stream = new MemoryStream();
+bitmap.Save(stream);
+return stream.ToArray();
+
+public void GeneratePdfFromImage(byte[] imageData, string filePath)
+{
+    Document.Create(container =>
+    {
+        container.Page(page =>
+        {
+            page.Size(PageSizes.A4);
+            page.Margin(1, Unit.Centimetre);
+            page.PageColor(Colors.White);
+
+            page.Content().Image(imageData); // Inserts the screenshot
+        });
+    })
+    .GeneratePdf(filePath);
+}
+
+<ItemsControl Name="SkillsItemsControl">
+            <ItemsControl.ItemsPanel>
+              <ItemsPanelTemplate><WrapPanel/></ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.ItemTemplate>
+              <DataTemplate>
+                <Button Content="{Binding Name, StringFormat='x {0}'}"
+                        Click="RemoveSkill_Click" Margin="2"/>
+              </DataTemplate>
+            </ItemsControl.ItemTemplate>
+          </ItemsControl>
+
+ <AutoCompleteBox Name="SkillSearchBox" Width="250" FilterMode="None" />
+
+ SkillSearchBox.AsyncPopulator = async (searchText, _) =>
+        {
+            var res = await ApiService.Request<List<string>>(HttpMethod.Get, $"Skills/suggest?q={searchText}");
+            return res.Data ?? new List<string>();
+        };
+
+
+  <ComboBox Name="SelectionsCombo" Width="250" PlaceholderText="Выберите подборку" SelectionChanged="SelectionsCombo_SelectionChanged">
+          <ComboBox.ItemTemplate>
+            <DataTemplate>
+              <TextBlock Text="{Binding Name}" />
+            </DataTemplate>
+          </ComboBox.ItemTemplate>
+        </ComboBox>

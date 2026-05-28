@@ -9,6 +9,7 @@
     <StackPanel Spacing="20" Margin="25">
       <StackPanel Orientation="Horizontal" Spacing="15">
         <Image Name="UserAvatar" Width="80" Height="80"/>
+        <Ellipse Width="10" Height="10" Fill="Green" />
 
         <StackPanel VerticalAlignment="Center">
           <TextBlock Name="PublicIdText" FontSize="22" FontWeight="Bold" Foreground="#2196F3"/>
@@ -16,7 +17,6 @@
         </StackPanel>
       </StackPanel>
 
-      <!-- Карточка рейтинга -->
       <Border Background="#F9F9F9" CornerRadius="10" Padding="20">
         <StackPanel Spacing="15">
           <StackPanel>
@@ -39,7 +39,6 @@
         </StackPanel>
       </Border>
 
-      <!-- Таблица навыков -->
       <TextBlock Text="Подтверждённые навыки" FontWeight="Bold" FontSize="18"/>
       <DataGrid Name="SkillsGrid" IsReadOnly="True" GridLinesVisibility="Horizontal">
         <DataGrid.Columns>
@@ -49,7 +48,6 @@
         </DataGrid.Columns>
       </DataGrid>
 
-      <!-- Опыт работы -->
       <TextBlock Text="Опыт работы" FontWeight="Bold" FontSize="18"/>
       <ItemsControl Name="ExpItems">
         <ItemsControl.ItemTemplate>
@@ -61,7 +59,6 @@
         </ItemsControl.ItemTemplate>
       </ItemsControl>
 
-      <!-- Кнопки действий -->
       <UniformGrid Columns="4" Margin="0,20,0,0">
         <Button Content="← Назад" Click="Back_Click"/>
         <Button Content="➕ В подборку" />

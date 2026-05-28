@@ -1,6 +1,4 @@
-using System.Security.Claims;
 using API.Models;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -10,7 +8,6 @@ public record DashboardSummary(string ActiveProfiles, string JobMatch, string Av
 
 [Route("api/[controller]")]
 [ApiController]
-[Authorize]
 public class DashboardController(CompetenceContext context) : ControllerBase
 {
     [HttpGet("summary")]

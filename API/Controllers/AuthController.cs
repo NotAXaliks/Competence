@@ -1,19 +1,15 @@
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
 using API.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
 
 namespace API.Controllers;
 
-public record LoginResponse(User User, string Token);
 public record LoginRequest(string Email, string Password);
+public record RegisterRequest(string Email, string Password, string FirstName, string MiddleName, string LastName);
 
 [Route("api/[controller]")]
 [ApiController]
-public class AuthController(CompetenceContext context, IConfiguration configuration) : ControllerBase
+public class AuthController(CompetenceContext context) : ControllerBase
 {
     [HttpPost("login")]
     public async Task<IActionResult> Login([FromBody] LoginRequest request)
@@ -21,33 +17,27 @@ public class AuthController(CompetenceContext context, IConfiguration configurat
         var user = await context.Users.Include(u => u.Role).FirstOrDefaultAsync(u => u.Email == request.Email && u.Password == request.Password);
         if (user == null) return Unauthorized(new ApiResponse(null, "Неверный логин или пароль", 403));
 
-        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Jwt:Key"]!));
-        var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-        var claims = new[] {
-                new Claim(ClaimTypes.Name, user.Id.ToString()),
-                new Claim(ClaimTypes.Role, user.RoleId.ToString())
-            };
-
-        var token = new JwtSecurityToken(
-            issuer: configuration["Jwt:Issuer"],
-            audience: configuration["Jwt:Audience"],
-            claims: claims,
-            expires: DateTime.Now.AddDays(5),
-            signingCredentials: creds
-        );
-
-        return Ok(new ApiResponse(new LoginResponse(user, new JwtSecurityTokenHandler().WriteToken(token))));
+        return Ok(new ApiResponse(user));
     }
 
     [HttpPost("refresh")]
-    public async Task<IActionResult> Refresh(string token)
+    public async Task<IActionResult> Register([FromBody] RegisterRequest request)
     {
-        return Ok(new ApiResponse(default, "Not implemented", 500));
+        var user = new User
+        {
+            Email = request.Email,
+            Password = request.Password,
+            FirstName = request.FirstName,
+            MiddleName = request.MiddleName,
+            LastName = request.LastName,
+        };
+
+        return StatusCode(201, new ApiResponse(user));
     }
 
     [HttpPost("logout")]
     public async Task<IActionResult> LogOut()
     {
-        return Ok(new ApiResponse(default, "Not implemented", 500));
+        return StatusCode(501, new ApiResponse(default, "В разработке", 501));
     }
 }

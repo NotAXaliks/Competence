@@ -1,43 +1,15 @@
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
 using API.Models;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
 
 namespace API.Controllers;
 
-public record UpdateMeRequest(string Name, string Email, string Phone);
 public record UserEmployeeData(int Id, string Name, string Avatar, Role Role, UserSkill[] Skills, Experience[] Experiences);
 
 [Route("api/[controller]")]
 [ApiController]
-// [Authorize]
 public class UsersController(CompetenceContext context) : ControllerBase
 {
-    [HttpGet("me")]
-    public async Task<IActionResult> GetMe()
-    {
-        return await GetUser(User.FindFirstValue(ClaimTypes.Name)!, null);
-    }
-
-    [HttpPut("me")]
-    public async Task<IActionResult> UpdateMe([FromBody] UpdateMeRequest dto)
-    {
-        var user = await context.Users.FirstOrDefaultAsync(u => u.Id.ToString() == User.FindFirstValue(ClaimTypes.Name));
-        if (user == null) return NotFound(new ApiResponse(null, "Не найден", 404));
-
-        user.Name = dto.Name;
-        user.Phone = dto.Phone;
-        user.Email = dto.Email;
-
-        await context.SaveChangesAsync();
-
-        return Ok(new ApiResponse(user));
-    }
-
     [HttpGet("{id}")]
     public async Task<IActionResult> GetUser(string id, [FromQuery] string? mode)
     {
@@ -68,22 +40,6 @@ public class UsersController(CompetenceContext context) : ControllerBase
         var rating = await context.UserRatings.FirstOrDefaultAsync(r => r.UserId.ToString() == id);
 
         return Ok(new ApiResponse(rating));
-    }
-
-    [HttpGet("me/rating")]
-    public async Task<IActionResult> GetMyRating()
-    {
-        return await GetUserRating(User.FindFirstValue(ClaimTypes.Name)!);
-    }
-
-    [HttpGet("me/rating/history")]
-    public async Task<IActionResult> GetUserRatingHistory()
-    {
-        var userId = int.Parse(User.FindFirst(ClaimTypes.Name).Value);
-
-        var history = await context.RatingHistories.Where(h => h.UserId == userId).ToListAsync();
-
-        return Ok(new ApiResponse(history));
     }
 
     [HttpGet("search")]

@@ -2,6 +2,7 @@ using System;
 using System.ComponentModel.DataAnnotations;
 using System.Net.Http;
 using API.Controllers;
+using API.Models;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
@@ -31,9 +32,9 @@ public partial class LoginWindow : Window
         Console.WriteLine("Clicked login button");
         var email = EmailTextBox.Text;
 
-        if (string.IsNullOrWhiteSpace(email))
+        if (string.IsNullOrWhiteSpace(email) || !email.Contains("@") || !email.Contains("."))
         {
-            var box = MessageBoxManager.GetMessageBoxStandard("Ошибка", "Поле Email не может быть пустым");
+            var box = MessageBoxManager.GetMessageBoxStandard("Ошибка", "Введите правильный Email");
             await box.ShowAsync();
             return;
         }
@@ -46,16 +47,13 @@ public partial class LoginWindow : Window
             return;
         }
 
-        var resp = await ApiService.Request<LoginResponse>(HttpMethod.Post, "Auth/login", new LoginRequest(email, password));
+        var resp = await ApiService.Request<User>(HttpMethod.Post, "Auth/login", new LoginRequest(email, password));
         if (!resp.Success)
         {
             var box = MessageBoxManager.GetMessageBoxStandard("Ошибка", resp.Error);
             await box.ShowAsync();
             return;
         }
-
-        ApiService.Token = resp.Data.Token;
-        TokenService.SetToken(ApiService.Token);
 
         var mainWindow = new MainWindow();
         mainWindow.Show();
