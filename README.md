@@ -1,3 +1,4 @@
+```csharp
 var pixelSize = new PixelSize((int)control.Bounds.Width, (int)control.Bounds.Height);
 using var bitmap = new RenderTargetBitmap(pixelSize);
 bitmap.Render(control);
@@ -22,6 +23,10 @@ public void GeneratePdfFromImage(byte[] imageData, string filePath)
     .GeneratePdf(filePath);
 }
 
+```
+
+
+```xaml
 <ItemsControl Name="SkillsItemsControl">
             <ItemsControl.ItemsPanel>
               <ItemsPanelTemplate><WrapPanel/></ItemsPanelTemplate>
@@ -50,3 +55,4 @@ public void GeneratePdfFromImage(byte[] imageData, string filePath)
             </DataTemplate>
           </ComboBox.ItemTemplate>
         </ComboBox>
+```
