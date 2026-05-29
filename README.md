@@ -1,58 +1,63 @@
-```csharp
-var pixelSize = new PixelSize((int)control.Bounds.Width, (int)control.Bounds.Height);
-using var bitmap = new RenderTargetBitmap(pixelSize);
-bitmap.Render(control);
-
-using var stream = new MemoryStream();
-bitmap.Save(stream);
-return stream.ToArray();
-
-public void GeneratePdfFromImage(byte[] imageData, string filePath)
-{
-    Document.Create(container =>
-    {
-        container.Page(page =>
-        {
-            page.Size(PageSizes.A4);
-            page.Margin(1, Unit.Centimetre);
-            page.PageColor(Colors.White);
-
-            page.Content().Image(imageData); // Inserts the screenshot
-        });
-    })
-    .GeneratePdf(filePath);
-}
-
+```jsx
+<ResponsiveContainer height="300">
+    <PieChart>
+        <Pie data={pieData}>
+            <Cell fill={"#1890ff"} />
+            <Cell fill={"#52c41a"} />
+            <Cell fill={"#faad14"} />
+        </Pie>
+        <Tooltip />
+        <Legend verticalAlign="bottom" />
+    </PieChart>
+</ResponsiveContainer>
 ```
 
+```jsx
+const [form] = Form.useForm();
 
-```xaml
-<ItemsControl Name="SkillsItemsControl">
-            <ItemsControl.ItemsPanel>
-              <ItemsPanelTemplate><WrapPanel/></ItemsPanelTemplate>
-            </ItemsControl.ItemsPanel>
-            <ItemsControl.ItemTemplate>
-              <DataTemplate>
-                <Button Content="{Binding Name, StringFormat='x {0}'}"
-                        Click="RemoveSkill_Click" Margin="2"/>
-              </DataTemplate>
-            </ItemsControl.ItemTemplate>
-          </ItemsControl>
+const expTypes = [{ label: 'Вузы', value: 1 }, { label: 'Курсы', value: 2 }];
 
- <AutoCompleteBox Name="SkillSearchBox" Width="250" FilterMode="None" />
+useEffect(() => {
+    const fetchData = async () => {
+        const res = await ApiService.request("GET", `/users/me`);
 
- SkillSearchBox.AsyncPopulator = async (searchText, _) =>
-        {
-            var res = await ApiService.Request<List<string>>(HttpMethod.Get, $"Skills/suggest?q={searchText}");
-            return res.Data ?? new List<string>();
-        };
+        form.setFieldsValue({
+            items: res.Data.Educations.map(s => ({
+                type: s.EducationTypeId,
+                name: s.Institution.Name,
+                period: [dayjs(s.StartDate), s.EndDate ? dayjs(s.EndDate) : dayjs()], 
+                document: "Документ"
+            }))
+        });
+    };
 
+    fetchData();
+}, [form]);
 
-  <ComboBox Name="SelectionsCombo" Width="250" PlaceholderText="Выберите подборку" SelectionChanged="SelectionsCombo_SelectionChanged">
-          <ComboBox.ItemTemplate>
-            <DataTemplate>
-              <TextBlock Text="{Binding Name}" />
-            </DataTemplate>
-          </ComboBox.ItemTemplate>
-        </ComboBox>
+return (
+    <Card title="Образование">
+        <Form form={form}>
+            <Form.List name="items">
+                {(fields, { add, remove }) => (
+                    <div style={{ display: 'flex', flexDirection: 'column' }}>
+                        {fields.map(({ key, name, ...field }) => (
+                            <Space key={key}>
+                                <Form.Item {...field} name={[name, 'type']} rules={[{ required: true }]} style={{ width: 120 }}>
+                                    <Select placeholder="Тип" options={expTypes} />
+                                </Form.Item>
+                                <Form.Item {...field} name={[name, 'name']}><Input placeholder="Название" /></Form.Item>
+                                <Form.Item {...field} name={[name, 'period']} rules={[{ required: true }]}><DatePicker.RangePicker style={{ width: '100%' }} /></Form.Item>
+                                <Form.Item {...field} name={[name, 'document']}><Input.TextArea placeholder="Документ" /></Form.Item>
+
+                                <Button danger onClick={() => remove(name)} />
+                            </Space>
+                        ))}
+
+                        <Button type="dashed" onClick={() => add()} block>Добавить опыт</Button>
+                    </div>
+                )}
+            </Form.List>
+        </Form>
+    </Card>
+);
 ```
