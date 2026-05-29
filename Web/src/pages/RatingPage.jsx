@@ -7,9 +7,9 @@ export default function RatingSummary() {
     const [rating, setRating] = useState(null);
 
     const pieData = [
-        { name: 'Образование', value: 30, color: '#1890ff' },
-        { name: 'Опыт работы', value: 30, color: '#52c41a' },
-        { name: 'Подтверждения', value: 40, color: '#faad14' },
+        { name: 'Образование', value: 30 },
+        { name: 'Опыт работы', value: 30 },
+        { name: 'Подтверждения', value: 40 },
     ];
 
     useEffect(() => {
@@ -32,12 +32,12 @@ export default function RatingSummary() {
             <ResponsiveContainer height="300">
                 <PieChart>
                     <Pie data={pieData}>
-                        {pieData.map((entry, index) => (
-                            <Cell key={index} fill={entry.color} />
-                        ))}
+                        <Cell fill={"#1890ff"} />
+                        <Cell fill={"#52c41a"} />
+                        <Cell fill={"#faad14"} />
                     </Pie>
                     <Tooltip />
-                    <Legend verticalAlign="bottom" height={36} />
+                    <Legend verticalAlign="bottom" />
                 </PieChart>
             </ResponsiveContainer>
         </Card>

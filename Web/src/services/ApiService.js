@@ -7,10 +7,7 @@ export class ApiService {
         try {
             const response = await fetch(`http://localhost:5299/api${url}`, {
                 method: method,
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${this.ls.get("token")}`
-                },
+                headers: { 'Content-Type': 'application/json' },
                 body: data ? JSON.stringify(data) : undefined,
             });
 

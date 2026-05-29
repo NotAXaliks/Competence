@@ -8,8 +8,8 @@ import Profile from './pages/Profile';
 import RatingPage from './pages/RatingPage';
 
 function App() {
-  const isLoggedIn = ApiService.ls.get("token");
-  if (!isLoggedIn) return (<LoginPage />);
+  // const isLoggedIn = ApiService.ls.get("token");
+  // if (!isLoggedIn) return (<LoginPage />);
 
   return (
     <BrowserRouter>

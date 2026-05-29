@@ -5,14 +5,14 @@ import { ApiService } from "../services/ApiService";
 import dayjs from "dayjs";
 
 function MainData() {
-    return (<>
+    return (<Form>
         <Form.Item name="fio" label="ФИО">
             <Input defaultValue={ApiService.user.Name} />
         </Form.Item>
         <Form.Item name="phone" label="Телефон">
             <Input defaultValue={ApiService.user.Phone} />
         </Form.Item>
-    </>);
+    </Form>);
 }
 
 function EducationData() {
@@ -42,7 +42,7 @@ function EducationData() {
             <Form form={form}>
                 <Form.List name="items">
                     {(fields, { add, remove }) => (
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: 15 }}>
+                        <div style={{ display: 'flex', flexDirection: 'column' }}>
                             {fields.map(({ key, name, ...field }) => (
                                 <Space key={key}>
                                     <Form.Item {...field} name={[name, 'type']} rules={[{ required: true }]} style={{ width: 120 }}>
